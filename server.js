@@ -38,12 +38,34 @@ server.post('/', (req, res) => {
     });
 });
 
-server.delete('/', (req, res) => {
-    res.status(200).json({ message: 'success', operation: 'DELETE' });
+server.delete('/:id', (req, res) => {
+    // res.status(200).json({ message: 'success', operation: 'DELETE' });
+    const id = req.params.id;
+    
+    db
+    .remove(id)
+    .then(account => {
+        res.status(200).json(account);
+    })
+    .catch(error => {
+        res.status(500).json({ error: 'error removing account', error });
+    });
 });
 
-server.put('/', (req, res) => {
-    res.status(200).json({ message: 'success', operation: 'PUT' });
+server.put('/:id', (req, res) => {
+    // res.status(200).json({ message: 'success', operation: 'PUT' });
+    const id = req.params.id;
+    const accountDetails = req.body;
+    console.log(accountDetails);
+
+    db
+    .update(id, accountDetails)
+    .then(account => {
+        res.status(200).json({ message: 'success', operation: 'PUT' });
+    })
+    .catch(error => {
+        res.status(500).json({ error: 'error updating account', error });
+    });
 });
 
 // fallback
